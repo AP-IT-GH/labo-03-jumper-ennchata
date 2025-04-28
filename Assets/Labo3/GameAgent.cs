@@ -9,6 +9,9 @@ public class GameAgent : Agent {
     public float JumpForce = 3.5f;
     public float TargetVelocityMin = 0.05f;
     public float TargetVelocityMax = 0.25f;
+    public float AirTimePunishment = 0.01f;
+    public float SuccessfulJumpReward = 5f;
+    public float TargetTouchedPunishment = 10f;
     public Transform Target;
 
     private Rigidbody rigidBody;
@@ -35,9 +38,6 @@ public class GameAgent : Agent {
     }
 
     public override void OnActionReceived(ActionBuffers actions) {
-        float airTimePunishment = 0.01f;
-        float successfulJumpReward = 5f;
-        float objectTouchPunishment = 10f;
         float objectDistanceTolerance = 1.5f;
         float onGroundTolerance = 0.1f;
         float continuousJumpInputTolerance = 0.1f;
@@ -46,20 +46,20 @@ public class GameAgent : Agent {
 
         // agent raakt target aan
         if (Vector3.Distance(transform.localPosition, Target.transform.localPosition) < objectDistanceTolerance) {
-            SetReward(-objectTouchPunishment);
+            SetReward(-TargetTouchedPunishment);
             EndEpisode();
             return;
         }
 
         // agent is in de lucht
         if (Mathf.Abs(transform.localPosition.y - initialPosition.y) > onGroundTolerance) {
-            AddReward(-airTimePunishment);
+            AddReward(-AirTimePunishment);
             return;
         }
 
         // target is voorbij agent
         if (Target.localPosition.x > transform.localPosition.x) {
-            SetReward(successfulJumpReward);
+            SetReward(SuccessfulJumpReward);
             EndEpisode();
             return;
         }
