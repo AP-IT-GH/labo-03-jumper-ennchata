@@ -290,8 +290,8 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   JumpForce: 3.5
-  TargetVelocityMin: 0.05
-  TargetVelocityMax: 0.25
+  TargetVelocityMin: 0.1
+  TargetVelocityMax: 0.35
   AirTimePunishment: 0.01
   SuccessfulJumpReward: 5
   TargetTouchedPunishment: 10
@@ -456,7 +456,7 @@ GameObject:
   - component: {fileID: 933628093}
   m_Layer: 0
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

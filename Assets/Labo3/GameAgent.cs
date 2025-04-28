@@ -6,9 +6,9 @@ using Unity.MLAgents.Actuators;
 using UnityEngine;
 
 public class GameAgent : Agent {
-    public float JumpForce = 2f;
-    public float TargetVelocityMin = 0.05f;
-    public float TargetVelocityMax = 0.25f;
+    public float JumpForce = 3.5f;
+    public float TargetVelocityMin = 0.1f;
+    public float TargetVelocityMax = 0.35f;
     public float AirTimePunishment = 0.01f;
     public float SuccessfulJumpReward = 5f;
     public float TargetTouchedPunishment = 10f;
@@ -18,11 +18,13 @@ public class GameAgent : Agent {
     private Vector3 initialPosition;
     private Vector3 targetInitialPosition;
     private float targetVelocity;
+    private bool onGround = true;
 
     private void Start() {
         rigidBody = GetComponent<Rigidbody>();
         initialPosition = transform.localPosition;
         targetInitialPosition = Target.localPosition;
+        onGround = true;
     }
 
     private void OnCollisionEnter(Collision collision) {
@@ -30,6 +32,12 @@ public class GameAgent : Agent {
             SetReward(TargetTouchedPunishment);
             EndEpisode();
         }
+
+        if (collision.gameObject.CompareTag("ground")) onGround = true;
+    }
+
+    private void OnCollisionExit(Collision collision) {
+        if (collision.gameObject.CompareTag("ground")) onGround = false;
     }
 
     public override void OnEpisodeBegin() {
@@ -46,13 +54,12 @@ public class GameAgent : Agent {
     }
 
     public override void OnActionReceived(ActionBuffers actions) {
-        float onGroundTolerance = 0.1f;
         float continuousJumpInputTolerance = 0.1f;
 
         Target.localPosition += new Vector3(targetVelocity, 0, 0);
 
         // agent is in de lucht
-        if (Mathf.Abs(transform.localPosition.y - initialPosition.y) > onGroundTolerance) {
+        if (!onGround) {
             AddReward(-AirTimePunishment);
             return;
         }
