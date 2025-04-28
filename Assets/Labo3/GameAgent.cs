@@ -6,7 +6,7 @@ using Unity.MLAgents.Actuators;
 using UnityEngine;
 
 public class GameAgent : Agent {
-    public float JumpForce = 3.5f;
+    public float JumpForce = 2f;
     public float TargetVelocityMin = 0.05f;
     public float TargetVelocityMax = 0.25f;
     public float AirTimePunishment = 0.01f;
@@ -25,7 +25,15 @@ public class GameAgent : Agent {
         targetInitialPosition = Target.localPosition;
     }
 
+    private void OnCollisionEnter(Collision collision) {
+        if (collision.gameObject.CompareTag("Obstacle")) {
+            SetReward(TargetTouchedPunishment);
+            EndEpisode();
+        }
+    }
+
     public override void OnEpisodeBegin() {
+        rigidBody.velocity = Vector3.zero;
         transform.SetPositionAndRotation(initialPosition, Quaternion.identity);
         Target.SetLocalPositionAndRotation(targetInitialPosition, Quaternion.identity);
         targetVelocity = Random.Range(TargetVelocityMin, TargetVelocityMax);
@@ -38,18 +46,10 @@ public class GameAgent : Agent {
     }
 
     public override void OnActionReceived(ActionBuffers actions) {
-        float objectDistanceTolerance = 1.5f;
         float onGroundTolerance = 0.1f;
         float continuousJumpInputTolerance = 0.1f;
 
         Target.localPosition += new Vector3(targetVelocity, 0, 0);
-
-        // agent raakt target aan
-        if (Vector3.Distance(transform.localPosition, Target.transform.localPosition) < objectDistanceTolerance) {
-            SetReward(-TargetTouchedPunishment);
-            EndEpisode();
-            return;
-        }
 
         // agent is in de lucht
         if (Mathf.Abs(transform.localPosition.y - initialPosition.y) > onGroundTolerance) {
