@@ -10,28 +10,28 @@ public class GameAgent : Agent {
     public float TargetVelocityMin = 0.1f;
     public float TargetVelocityMax = 0.35f;
     public float AirTimePunishment = 0.01f;
-    public float SuccessfulJumpReward = 5f;
+    public float SuccessfulJumpReward = 1f;
     public float TargetTouchedPunishment = 10f;
-    public Transform Target;
+    public float EpisodePassRewardRequirement = 5f;
 
     private Rigidbody rigidBody;
+    private ObstacleSpawner obstacleSpawner;
     private Vector3 initialPosition;
     private Quaternion initialRotation;
-    private Vector3 targetInitialPosition;
     private float targetVelocity;
     private bool onGround = true;
 
     private void Start() {
         rigidBody = GetComponent<Rigidbody>();
+        obstacleSpawner = GetComponent<ObstacleSpawner>();
         initialPosition = transform.localPosition;
         initialRotation = transform.rotation;
-        targetInitialPosition = Target.localPosition;
         onGround = true;
     }
 
     private void OnCollisionEnter(Collision collision) {
         if (collision.gameObject.CompareTag("Obstacle")) {
-            SetReward(TargetTouchedPunishment);
+            SetReward(-TargetTouchedPunishment);
             EndEpisode();
         }
 
@@ -44,21 +44,20 @@ public class GameAgent : Agent {
 
     public override void OnEpisodeBegin() {
         rigidBody.velocity = Vector3.zero;
-        transform.SetPositionAndRotation(initialPosition, initialRotation);
-        Target.SetLocalPositionAndRotation(targetInitialPosition, Quaternion.identity);
+        transform.SetLocalPositionAndRotation(initialPosition, initialRotation);
         targetVelocity = Random.Range(TargetVelocityMin, TargetVelocityMax);
+        obstacleSpawner.ClearObstacles();
     }
 
     public override void CollectObservations(VectorSensor sensor) {
         sensor.AddObservation(transform.localPosition);
-        //sensor.AddObservation(Target.localPosition);
-        //sensor.AddObservation(targetVelocity);
     }
 
     public override void OnActionReceived(ActionBuffers actions) {
         float continuousJumpInputTolerance = 0.1f;
 
-        Target.localPosition += new Vector3(targetVelocity, 0, 0);
+        obstacleSpawner.TryCreateObstacle(targetVelocity);
+        obstacleSpawner.MoveObstacles(targetVelocity);
 
         // agent is in de lucht
         if (!onGround) {
@@ -67,10 +66,9 @@ public class GameAgent : Agent {
         }
 
         // target is voorbij agent
-        if (Target.localPosition.x > transform.localPosition.x) {
-            SetReward(SuccessfulJumpReward);
-            EndEpisode();
-            return;
+        int passedObstacles = obstacleSpawner.CountObstaclesPassed(transform.position);
+        if (passedObstacles > 0) {
+            AddReward(passedObstacles * SuccessfulJumpReward);
         }
 
         // krijgt input actie
@@ -79,6 +77,11 @@ public class GameAgent : Agent {
             return;
         }
 
+        // genoeg reward = nieuwe episode
+        if (GetCumulativeReward() >= EpisodePassRewardRequirement) {
+            EndEpisode();
+            return;
+        }
     }
 
     public override void Heuristic(in ActionBuffers actionsOut) {
