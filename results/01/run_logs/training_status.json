@@ -1,0 +1,29 @@
+{
+    "GameAgent": {
+        "checkpoints": [
+            {
+                "steps": 20197,
+                "file_path": "results\\01\\GameAgent\\GameAgent-20197.onnx",
+                "reward": 10.0,
+                "creation_time": 1745854912.2312334,
+                "auxillary_file_paths": [
+                    "results\\01\\GameAgent\\GameAgent-20197.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 20197,
+            "file_path": "results\\01\\GameAgent.onnx",
+            "reward": 10.0,
+            "creation_time": 1745854912.2312334,
+            "auxillary_file_paths": [
+                "results\\01\\GameAgent\\GameAgent-20197.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

@@ -316,13 +316,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 16834994656440396, guid: d1ca4837ec53405479ad41e80830107a, type: 3}
+      propertyPath: m_MaxRayDegrees
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 16834994656440396, guid: d1ca4837ec53405479ad41e80830107a, type: 3}
+      propertyPath: m_RaysPerDirection
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 112590429939282136, guid: d1ca4837ec53405479ad41e80830107a, type: 3}
       propertyPath: AirTimePunishment
-      value: 0.1
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 112590429939282136, guid: d1ca4837ec53405479ad41e80830107a, type: 3}
       propertyPath: SuccessfulJumpReward
-      value: 1
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 112590429939282136, guid: d1ca4837ec53405479ad41e80830107a, type: 3}
+      propertyPath: TargetTouchedPunishment
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3464718295428349042, guid: d1ca4837ec53405479ad41e80830107a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -370,7 +382,7 @@ PrefabInstance:
       objectReference: {fileID: 5022602860645237092, guid: 39f0f51aabac80f4a906735ca3042e4f, type: 3}
     - target: {fileID: 4809011014261959599, guid: d1ca4837ec53405479ad41e80830107a, type: 3}
       propertyPath: m_BehaviorType
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7417319879084987518, guid: d1ca4837ec53405479ad41e80830107a, type: 3}
       propertyPath: m_Name

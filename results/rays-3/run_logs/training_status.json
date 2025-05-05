@@ -1,0 +1,29 @@
+{
+    "GameAgent": {
+        "checkpoints": [
+            {
+                "steps": 30069,
+                "file_path": "results\\rays-3\\GameAgent\\GameAgent-30069.onnx",
+                "reward": null,
+                "creation_time": 1746453914.029393,
+                "auxillary_file_paths": [
+                    "results\\rays-3\\GameAgent\\GameAgent-30069.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 30069,
+            "file_path": "results\\rays-3\\GameAgent.onnx",
+            "reward": null,
+            "creation_time": 1746453914.029393,
+            "auxillary_file_paths": [
+                "results\\rays-3\\GameAgent\\GameAgent-30069.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}
