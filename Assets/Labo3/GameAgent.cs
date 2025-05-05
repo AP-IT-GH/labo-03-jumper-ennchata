@@ -16,6 +16,7 @@ public class GameAgent : Agent {
 
     private Rigidbody rigidBody;
     private Vector3 initialPosition;
+    private Quaternion initialRotation;
     private Vector3 targetInitialPosition;
     private float targetVelocity;
     private bool onGround = true;
@@ -23,6 +24,7 @@ public class GameAgent : Agent {
     private void Start() {
         rigidBody = GetComponent<Rigidbody>();
         initialPosition = transform.localPosition;
+        initialRotation = transform.rotation;
         targetInitialPosition = Target.localPosition;
         onGround = true;
     }
@@ -42,15 +44,15 @@ public class GameAgent : Agent {
 
     public override void OnEpisodeBegin() {
         rigidBody.velocity = Vector3.zero;
-        transform.SetPositionAndRotation(initialPosition, Quaternion.identity);
+        transform.SetPositionAndRotation(initialPosition, initialRotation);
         Target.SetLocalPositionAndRotation(targetInitialPosition, Quaternion.identity);
         targetVelocity = Random.Range(TargetVelocityMin, TargetVelocityMax);
     }
 
     public override void CollectObservations(VectorSensor sensor) {
         sensor.AddObservation(transform.localPosition);
-        sensor.AddObservation(Target.localPosition);
-        sensor.AddObservation(targetVelocity);
+        //sensor.AddObservation(Target.localPosition);
+        //sensor.AddObservation(targetVelocity);
     }
 
     public override void OnActionReceived(ActionBuffers actions) {
