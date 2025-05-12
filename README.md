@@ -40,4 +40,4 @@ My current agent completes its trained task fairly well, but only struggles when
 
 ## Video
 
-Link: Panopto.
+Link: [Panopto](https://ap.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d3f27877-ef1e-42fd-9aec-b2db00ca3b45).
